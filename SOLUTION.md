@@ -93,5 +93,7 @@ class Task(models.Model):
         return self.task
 ```
 
-
-
+Actualizar modelo en base de datos:
+```console
+python manage.py makemigrations task
+```
