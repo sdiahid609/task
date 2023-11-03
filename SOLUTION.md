@@ -139,6 +139,15 @@ urlpatterns = [
 Creamos la vista en task/views.py
 
 ```python
-def post_list(request):
-    return render(request, 'blog/post_list.html', {})
+def task_list(request):
+    return render(request, 'task/task_list.html', {})
 ```
+
+Hay que hacer una migración:
+
+```console
+python manage.py makemigrations task
+python manage.py migrate task
+```
+
+Creamos templates/task/task_list.html

@@ -6,4 +6,4 @@ class Task(models.Model):
     checkBox = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.task
+        return self.title
