@@ -5,4 +5,4 @@ class Task(models.Model):
     checkBox = models.BooleanField()
 
     def __str__(self):
-        return self.title
+        return self.task
