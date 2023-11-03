@@ -132,13 +132,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.task_list, name='tasks_list'),
+    path('', views.task_list, name='task_list'),
 ]
 ```
 
 Creamos la vista en task/views.py
 
 ```python
+from django.shortcuts import render
+
 def task_list(request):
     return render(request, 'task/task_list.html', {})
 ```
