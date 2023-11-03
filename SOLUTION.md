@@ -96,4 +96,49 @@ class Task(models.Model):
 Actualizar modelo en base de datos:
 ```console
 python manage.py makemigrations task
+python manage.py migrate task
+```
+
+Adminastrador de Django
+```python
+from django.contrib import admin
+from .models import Task
+
+admin.site.register(Task)
+```
+
+Crear superusuario:
+
+```console
+python manage.py createsuperuser
+```
+
+Añadimos la url de la app en mysite/urls.py:
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('task.urls')),
+]
+```
+
+Creamos el archivo task/urls.py
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.task_list, name='tasks_list'),
+]
+```
+
+Creamos la vista en task/views.py
+
+```python
+def post_list(request):
+    return render(request, 'blog/post_list.html', {})
 ```
