@@ -152,4 +152,173 @@ python manage.py makemigrations task
 python manage.py migrate task
 ```
 
+Entramos en la consola de Django
+
+```console
+python manage.py shell
+```
+
+Importamos task.models
+
+```console
+from task.models import Task
+```
+
+Vemos todas las Tasks:
+
+```console
+Task.objects.all()
+```
+
+En views.py añadimos las tasks:
+
+```python
+from django.shortcuts import render
+from .models import Task
+
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'task/task_list.html', {'tasks' : tasks})
+```
+
 Creamos templates/task/task_list.html
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task list</title>
+  </head>
+  <body>
+    {% for task in tasks %} 
+        <p>{{ task.title }}</p>
+        <p>{{ task.description }}</p>
+        <p>{{ task.checkBox }}</p>
+    {% endfor %}
+  </body>
+</html>
+
+Creamos task/forms.py
+
+```python
+from django import forms
+from .models import Task
+
+class TaskForm(forms.ModelForm):
+
+    class Meta:
+        model = Task
+        fields = ('title', 'text',)
+```
+task_list.html
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task list</title>
+  </head>
+  <body>
+    <h1>Tasks</h1>
+    <a href="{% url 'task_new' %}"><p>Añadir nueva tarea</p></a>
+    <hr>
+    {% for task in tasks %} 
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.description }}</p>
+        <p>{{ task.checkBox }}</p>
+        <hr>
+    {% endfor %}
+  </body>
+</html>
+
+urls.py
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.task_list, name='task_list'),
+    path('task/new/', views.task_new, name='task_new'),
+]
+```
+
+forms.py
+
+```python
+from django import forms
+
+from .models import Task
+
+class TaskForm(forms.ModelForm):
+
+    class Meta:
+        model = Task
+        fields = ('title', 'description',)
+```
+
+views.py
+
+```python
+from django.shortcuts import render
+from .models import Task
+from .forms import TaskForm
+
+
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'task/task_list.html', {'tasks' : tasks})
+    
+def task_new(request):
+    form = TaskForm()
+    return render(request, 'task/task_edit.html', {'form': form})
+```
+
+templates/task_edit.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task edit</title>
+</head>
+<body>
+    <h1>Task edit</h1>
+    <hr>
+    <h2>New task</h2>
+    <form method="TASK" class="task-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
+
+Para que se guarden las tasks, en views.py:
+
+```python
+from django.shortcuts import render
+from .models import Task
+from .forms import TaskForm
+from django.shortcuts import redirect
+
+
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'task/task_list.html', {'tasks' : tasks})
+    
+def task_new(request):
+    if request.method == "TASK":
+        form = TaskForm(request.TASK)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.title = request.user
+            task.description = request.user
+            task.save()
+            return redirect('task_list', pk=task.pk)
+    else:
+        form = TaskForm()
+    return render(request, 'task/task_edit.html', {'form': form})
+```

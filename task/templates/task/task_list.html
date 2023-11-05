@@ -6,6 +6,14 @@
     <title>Task list</title>
   </head>
   <body>
-    {% for task in task %} {{ task }} {% endfor %}
+    <h1>Tasks</h1>
+    <a href="{% url 'task_new' %}"><p>Añadir nueva tarea</p></a>
+    <hr>
+    {% for task in tasks %} 
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.description }}</p>
+        <p>{{ task.checkBox }}</p>
+        <hr>
+    {% endfor %}
   </body>
 </html>
