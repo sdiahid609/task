@@ -289,7 +289,7 @@ templates/task_edit.html
     <h1>Task edit</h1>
     <hr>
     <h2>New task</h2>
-    <form method="TASK" class="task-form">{% csrf_token %}
+    <form method="POST" class="task-form">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Save</button>
     </form>
@@ -310,8 +310,8 @@ def task_list(request):
     return render(request, 'task/task_list.html', {'tasks' : tasks})
     
 def task_new(request):
-    if request.method == "TASK":
-        form = TaskForm(request.TASK)
+    if request.method == "POST":
+        form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
             task.title = request.user
