@@ -10,22 +10,19 @@ class task_list(View):
         return render(request, 'task/task_list.html', {'tasks' : tasks})
 
 
-
-
 class task_new(View):
-    if form.is_valid():
-        title = form.cleaned_data["title"]
-        description = form.cleaned_data["description"]
-        checkBox = form.cleaned_data["checkBox"]
-
     form = TaskForm()
     def get(self, request):
         self.form = TaskForm() #Esta creando un formulario vacío
         return render(request, 'task/task_edit.html', {'form': self.form}) #Si falla algun campo, redirije a la misma pagina con el formulario lleno
     def post(self, request):
         self.form = TaskForm(request.POST) #El form recibe el request.post
-        if self.form.is_valid(): 
-            self.form.save() 
+        if self.form.is_valid():
+            title = self.form.cleaned_data["title"]
+            description = self.form.cleaned_data["description"]
+            checkBox = self.form.cleaned_data["checkBox"]
+            nuevaTask = Task(title=title, description=description, checkBox=checkBox)
+            nuevaTask.save()
             return redirect('task_list')
         return render(request, 'task/task_edit.html', {'form': self.form}) #Si falla algun campo, redirije a la misma pagina con el formulario lleno  
 
