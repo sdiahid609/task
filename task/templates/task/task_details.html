@@ -9,28 +9,26 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <title>Task list</title>
+    <title>Task details</title>
   </head>
   <body>
     <div class="container">
-      <h1 class="text-center mt-5">Tasks</h1>
-      <a class="text-center" href="{% url 'task_new' %}"><p>Añadir nueva tarea</p></a>
-      <hr />
-      <div class="row">
-        {% for task in tasks %}
-        <div class="col-4">
-          <div class="card m-2" style="width: 18rem">
-            <div class="card-body">
-              <h5 class="card-title">{{ task.title }}</h5>
-              <p class="card-text">{{ task.description }}</p>
-              <p>{{ task.checkBox|yesno:"Sí,No" }}</p>
-              <a href="{% url 'task_details' pk=task.pk %}" class="card-link"
-                >Ver detalles de la tarea</a
-              >
+      <div class="task">
+        <div class="card mt-5" style="width: 18rem">
+          <div class="card-body">
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">{{ task.description }}</p>
+            <p>{{ task.checkBox|yesno:"Sí,No" }}</p>
+            <div class="row">
+              <div class="col-6">
+                <a href="{% url 'task_list' %}" class="card-link">Volver</a>
+              </div>
+              <div class="col-6">
+                <a href="{% url 'task_edit' pk=task.pk %}" class="card-link">Editar</a>
+              </div>
             </div>
           </div>
         </div>
-        {% endfor %}
       </div>
     </div>
     <script

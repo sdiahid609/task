@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task edit</title>
+    <title>Document</title>
 </head>
 <body>
-    <h1>New Task</h1>
-    <hr>
-    <h2>New task</h2>
-    <form method="POST" action="" class="task-form">{% csrf_token %}
-        {{ form.as_p }} 
-        <button type="submit">Save</button>
-    </form>
+    <div class="container">
+        <h1 class="mt-5">New Task</h1>
+        <hr />
+        <h2>New task</h2>
+        <form method="POST" action="" class="task-form">
+          {% csrf_token %} {{ form.as_p }}
+          <button type="submit">Save</button>
+        </form>
+      </div>
 </body>
 </html>
